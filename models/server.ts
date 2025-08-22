@@ -1,10 +1,10 @@
 import express, { Express } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { connectBD } from "../database/DBConfig";
 
 import authPieceRouter from "../routes/authPiece";
 import authCombinedRouter from "../routes/authCombinedPieces";
+import { connectBD } from "../dataBase/DBConfig";
 
 dotenv.config();
 
