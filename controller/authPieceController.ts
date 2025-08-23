@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import Piece, { IPiece } from "../models/piece";
 import randomstring from "randomstring";
+import { connectBD } from "../dataBase/DBConfig";
 
 export const getPieceControllers = async (req: Request, res: Response) => {
+  await connectBD();
   try {
     const pieces = await Piece.find().exec();
     if (pieces.length === 0) {
@@ -22,6 +24,8 @@ export const getPieceControllers = async (req: Request, res: Response) => {
 };
 
 export const addPieceControllers = async (req: Request, res: Response) => {
+  await connectBD();
+
   const { name, description, img }: IPiece = req.body;
 
   try {
@@ -50,6 +54,8 @@ export const addPieceControllers = async (req: Request, res: Response) => {
 };
 
 export const updatePiece = async (req: Request, res: Response) => {
+  await connectBD();
+
   const { code, description, img, name }: IPiece = req.body;
 
   try {

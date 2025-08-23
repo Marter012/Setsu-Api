@@ -1,17 +1,22 @@
 import mongoose from "mongoose";
 
-export const connectBD = async (): Promise<void> => {
-  const MONGO_URI = process.env.MONGO_URI;
+let cached = (global as any).mongoose;
 
-  if (!MONGO_URI) {
-    throw new Error("La variable de entorno MONGO_URI no está definida.");
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+export const connectBD = async () => {
+  if (cached.conn) return cached.conn;
+
+  if (!process.env.MONGO_URI) throw new Error("MONGO_URI no definida");
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGO_URI).then((mongoose) => {
+      return mongoose;
+    });
   }
 
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log("✅ MongoDB connected");
-  } catch (error) {
-    console.error("❌ Error connecting to MongoDB:", error);
-    throw error;
-  }
+  cached.conn = await cached.promise;
+  return cached.conn;
 };

@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import CombinedPieces, { ICombinedPieces } from "../models/combinedPieces";
 import randomstring from "randomstring";
+import { connectBD } from "../dataBase/DBConfig";
 
 export const getCombinedPiecesControllers = async (
   req: Request,
   res: Response
 ) => {
+  await connectBD();
+
   try {
     const combinedPieces = await CombinedPieces.find().exec();
     if (combinedPieces.length === 0) {
@@ -28,6 +31,8 @@ export const addCombinedPiecesControllers = async (
   req: Request,
   res: Response
 ) => {
+  await connectBD();
+
   const { name, typePieces, img }: ICombinedPieces = req.body;
 
   try {
@@ -56,6 +61,8 @@ export const addCombinedPiecesControllers = async (
 };
 
 export const updateCombinedPieces = async (req: Request, res: Response) => {
+  await connectBD();
+
   const { code, img, name, typePieces }: ICombinedPieces = req.body;
   try {
     const combinedPieces = await CombinedPieces.findOne({ code });

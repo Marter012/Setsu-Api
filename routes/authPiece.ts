@@ -9,17 +9,6 @@ import { collectErrors } from "../middlewares/collectErrors";
 
 const router = Router();
 
-// Endpoint GET ejemplo
-router.get("/", (req, res) => {
-  res.status(200).json({ msg: "authPiece endpoint" });
-});
-
-// Endpoint POST ejemplo
-router.post("/add", (req, res) => {
-  const { name } = req.body;
-  res.status(201).json({ msg: `Pieza ${name} agregada` });
-});
-
 router.get("/piece", getPieceControllers);
 
 router.post(
