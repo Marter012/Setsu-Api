@@ -10,11 +10,9 @@ dotenv.config();
 
 export class Server {
   public app: Express;
-  private port: string | number;
 
   constructor() {
     this.app = express();
-    this.port = process.env.PORT || 3000;
 
     this.middlewares();
     this.routes();
@@ -26,28 +24,17 @@ export class Server {
   }
 
   private routes(): void {
-    // this.app.get("/ping", (req, res) => {
-    //   res.status(200).json({ msg: "pong" });
-    // });
-
     this.app.use("/authPiece", authPieceRouter);
     this.app.use("/authCombinedPieces", authCombinedRouter);
   }
 
-  // Método para iniciar la app, asegurando que DB esté conectada
-  public async start(): Promise<void> {
+  // Función para inicializar DB en modo serverless
+  public async initDB(): Promise<void> {
     try {
       await connectBD();
-
-      if (process.env.NODE_ENV !== "production") {
-        this.app.listen(this.port, () =>
-          console.log(`Server running on port ${this.port}`)
-        );
-      }
+      console.log("DB conectada");
     } catch (error) {
-      console.error("Error starting server:", error);
-      process.exit(1);
+      console.error("Error conectando a la DB:", error);
     }
   }
 }
-
